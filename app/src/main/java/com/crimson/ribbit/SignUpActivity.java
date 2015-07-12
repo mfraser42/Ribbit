@@ -74,7 +74,6 @@ public class SignUpActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
                             else {
-
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                 builder.setMessage(e.getMessage());
                                 builder.setTitle(getString(R.string.signup_error_title));

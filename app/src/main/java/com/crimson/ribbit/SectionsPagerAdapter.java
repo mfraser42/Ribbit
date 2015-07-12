@@ -13,10 +13,6 @@ import java.util.Locale;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    // In the lesson, we factor this code out of MainActivity.class, and thus must add the context
-    // as a member variable that gets passed in through the constructor. Nothing about this
-    // will change from the video, no deprecation involved, no Android Studio conflicts.
-
     protected Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -28,15 +24,18 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return MainActivity.PlaceholderFragment.newInstance(position + 1);
+        //return MainActivity.PlaceholderFragment.newInstance(position + 1);
+        switch (position) {
+            case 0:
+                return new InboxFragment();
+            case 1:
+                return new FriendsFragment();
+        }
+        return null;
     }
 
     @Override
     public int getCount() {
-        // In the video we reduce this boilerplate value from 3
-        // to 2 tabs, one for Inbox and one for Friends. Again, no
-        // change needed from the video, follow along.
-        // Show 2 total pages.
         return 2;
     }
 
@@ -46,9 +45,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         // this is where we'll pass the context to variables that are now
         // outside the scope of MainActivity.class after the refactor.
         // again, nothing different than the video, follow the video.
-        // Remember to delete the third case in the boilerplate code
-        // and change the strings resources entries to Inbox and
-        // Friends, respectively, just like in the video.
         switch (position) {
             case 0:
                 return mContext.getString(R.string.title_section1).toUpperCase(l);
