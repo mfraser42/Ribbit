@@ -105,7 +105,6 @@ public class RecipientsActivity extends ListActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_send) {
             ParseObject message = createMessage();
             if (message == null) {
@@ -176,7 +175,7 @@ public class RecipientsActivity extends ListActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     //successful
-                    Toast.makeText(RecipientsActivity.this, getString(R.string.success_message), Toast.LENGTH_LONG);
+                    Toast.makeText(RecipientsActivity.this, getString(R.string.success_message), Toast.LENGTH_LONG).show();
                 } else {
                     //error
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
