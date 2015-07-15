@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (fileSize >= FILE_SIZE_LIMIT) {
                         Toast.makeText(this, getString(R.string.error_file_size_too_large), Toast.LENGTH_LONG).show();
-                        //return;  unnecessary as last statement
+                        return;
                     }
 
                 }
