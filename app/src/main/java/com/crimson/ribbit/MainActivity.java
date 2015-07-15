@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
@@ -145,9 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -156,10 +156,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.i(TAG, currentUser.getUsername());
         }
-
-        // Set up the action bar.
-        final ActionBar actionBar = getSupportActionBar();
-
         // Create the adapter that will return a fragment for each of the two
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
@@ -197,10 +193,10 @@ public class MainActivity extends AppCompatActivity {
                         inputStream = getContentResolver().openInputStream(mMediaUri);
                         fileSize = inputStream.available();
                     } catch (FileNotFoundException e) {
-                        Toast.makeText(this, getString(R.string.error_opening_file) + " (FNF)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
                         return;
                     } catch (IOException e) {
-                        Toast.makeText(this, getString(R.string.error_opening_file) + " (IO)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.error_opening_file), Toast.LENGTH_LONG).show();
                         return;
                     }
                     finally {
@@ -222,8 +218,17 @@ public class MainActivity extends AppCompatActivity {
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
             }
-
-
+            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            String fileType;
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
+                fileType = ParseConstants.TYPE_IMAGE;
+            }
+            else {
+                fileType = ParseConstants.TYPE_VIDEO;
+            }
+            recipientsIntent.putExtra(ParseConstants.KEY_FILE_TYPE, fileType);
+            startActivity(recipientsIntent);
         }
         else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
@@ -247,9 +252,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_logout:
                 ParseUser.logOut();
                 navigateToLogin();
+                break;
             case R.id.action_edit_friends:
                 Intent intent = new Intent(this, EditFriendsActivity.class);
                 startActivity(intent);
+                break;
             case R.id.action_camera:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setItems(R.array.camera_choices, mDialogListener);

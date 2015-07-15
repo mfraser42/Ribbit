@@ -40,14 +40,14 @@ public class FriendsFragment extends ListFragment{
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
-        // to later add progress circle: getActivity().setProgressBarIndeterminateVisibility(true);
+        getActivity().setProgressBarIndeterminateVisibility(true);
 
         ParseQuery<ParseUser> query = mFriendsRelation.getQuery();
         query.addAscendingOrder(ParseConstants.KEY_USERNAME);
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> friends, ParseException e) {
-                // to later add progress circle: getActivity().setProgressBarIndeterminateVisibility(false);
+                getActivity().setProgressBarIndeterminateVisibility(false);
                 if (e == null) {
 
                     mFriends = friends;
@@ -58,19 +58,20 @@ public class FriendsFragment extends ListFragment{
                         usernames[i] = user.getUsername();
                         i++;
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getListView().getContext(), android.R.layout.simple_list_item_1, usernames);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            getListView().getContext(),
+                            android.R.layout.simple_list_item_1, usernames);
                     setListAdapter(adapter);
                 } else {
                     Log.e(TAG, e.getMessage());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
-                    builder.setMessage(e.getMessage());
-                    builder.setTitle(getString(R.string.error_title));
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                        }
-                    }
-                });
+                    //AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
+                    //builder.setMessage(e.getMessage());
+                    //builder.setTitle(getString(R.string.error_title));
+                    //builder.setPositiveButton(android.R.string.ok, null);
+                    //AlertDialog dialog = builder.create();
+                   // dialog.show();
+                }
+            }
+        });
     }
-
 }
